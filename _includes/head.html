@@ -1,24 +1,32 @@
+<!-- meta information -->
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" {% if page.title == "Home" %}
+      content="{{ site.description }}" {% else %}
+      content="{{ page.content | strip_html | strip_newlines | truncate: 120 }}" {% endif %}>
+<meta name="author" content="{{ site.author }}">
 
-{%- include snippets/get-article-title.html article=page -%}
-<title>{%- if __return -%}{{ __return }} - {{ site.title }}{%- else -%}{{ site.title }}{%- endif -%}</title>
+<!-- Enable responsiveness on mobile devices-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="{%- if page.excerpt -%}{{ page.excerpt | strip_html | strip_newlines | strip | truncate: 160 }}{%- else -%}{{ site.description }}{%- endif -%}">
-<link rel="canonical" href="{%- include snippets/page-url.html -%}">
+<!-- title -->
+<title>{% if page.title %}{{ page.title }} &middot; {% endif %}{{ site.title }}</title>
 
-{%- assign _paths_rss = site.paths.rss | default: site.data.variables.default.paths.rss -%}
-{%- include snippets/get-nav-url.html path=_paths_rss -%}
-<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ __return }}">
+<!-- icons -->
+<link rel="shortcut icon" href="{{ '/assets/images/favicon.ico' | relative_url }}">
 
-{%- include head/favicon.html -%}
+<!-- stylesheets -->
+<link rel="stylesheet" href="{{ '/assets/css/responsive.gs.12col.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/animate.min.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/syntax.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
-{%- include snippets/prepend-baseurl.html path='/assets/css/main.css' -%}
-<link rel="stylesheet" href="{{ __return }}">
+<!-- Google fonts -->
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
 
-{%- include snippets/get-sources.html -%}
-{%- assign _sources = __return -%}
-<link rel="stylesheet" href="{{ _sources.font_awesome }}" >
+{% if site.paginate %}
+<!-- font Awesome -->
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+{% endif %}
 
-{%- include head/custom.html -%}
+<!-- feed links -->
+<link rel="alternate" href="{{ 'feed.xml' | absolute_url }}" type="application/rss+xml" title="{{ site.title }}">
