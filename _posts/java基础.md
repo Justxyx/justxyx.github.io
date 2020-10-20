@@ -1,3 +1,12 @@
+---
+title: java 基础
+author: xyx
+date: 2020-10-20 20:33:00 +0800
+categories: [Blogging, java]
+tags: [java]
+math: true
+
+---
 # day1 
 ## 前言
 - 字节转换
