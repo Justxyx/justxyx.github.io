@@ -13,7 +13,8 @@ math: true
 - 环境变量的配置
   环境变量–>点到系统变量中的Path–>编辑
   增加两个，如下图所示，选择自己的安装路径。
-  <img src="D:\blog\justxyx.github.io\assets\img\deep-learning\tensorflow2.0+keras环境配置\a1.png">
+  <img src="/assets/img/dee"></img>
+  <img src="assets/img/deep-learning/tensorflow2.0+keras环境配置/a1.png">
 
 ## tensorflow2.0与keras安装
 
