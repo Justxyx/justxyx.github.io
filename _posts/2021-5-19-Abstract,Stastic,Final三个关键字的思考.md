@@ -1,8 +1,8 @@
 ---
-title: 2021-5-19-Abstract,Static,Final三个关键字
+title: Abstract,Static,Final三个关键字
 author: xyx
 date: 2021-5-18 20:33:00 +0800
-categories: [justxyx, java]
+categories: [justxyx, Reid]
 tags: 
 math: true
 
