@@ -2,7 +2,7 @@
 title: Abstract,Static,Final三个关键字
 author: xyx
 date: 2021-5-18 20:33:00 +0800
-categories: [justxyx, deep]
+categories: [justxyx, computer-system-structure]
 tags: 
 math: true
 
