@@ -52,14 +52,6 @@ math: true
 
 ## final
 
-1. 静态的 final 是常数
-   ```java
-   public static final double PI = 3.1415
-    <!-- PI 要全部大写 -->
-   ```
-2. 非静态的 final 变量
-   不可改变
-3. final 的方法
-   final 的方法不可被覆盖。
-4. final 的类
-   final 的类不可被继承。
+1. 类：被修饰的类，不能被继承。
+2. 方法：被修饰的方法，不能被重写。
+3. 变量：被修饰的变量，不能被重新赋值。 **只能被赋值一次** 
