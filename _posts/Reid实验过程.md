@@ -35,3 +35,10 @@
 - 改机6
   调参
 ![p2](/assets/ims/2021.11/p6.png)
+
+
+# dukemtmcreid
+
+- 原始结果
+![p2](/assets/ims/2021.11/p7.png)
+- 模型改进
