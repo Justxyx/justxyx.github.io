@@ -37,9 +37,11 @@
 ![p2](/assets/ims/2021.11/p6.png)
 
 
-# dukemtmcreid
+# 2.dukemtmcreid
 
 - 原始结果
 ![p2](/assets/ims/2021.11/p7.png)
 - 模型改进1
 ![p2](/assets/ims/2021.11/p8.png)
+- 模型改进2
+![p2](/assets/ims/2021.11/p9.png)
