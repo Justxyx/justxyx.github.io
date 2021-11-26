@@ -45,3 +45,12 @@
 ![p2](/assets/ims/2021.11/p8.png)
 - 模型改进2
 ![p2](/assets/ims/2021.11/p9.png)
+
+
+# 3. msmt17
+- 初始结果
+与论文复现结果相差太多
+![p2](/assets/ims/2021.11/p10.png)
+
+
+# 4. personx
