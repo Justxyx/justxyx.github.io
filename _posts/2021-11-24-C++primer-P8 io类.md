@@ -1,5 +1,5 @@
 ---
-title: 2021-11-24-C++primer-p2 变量与基本类型
+title: C++primer-p2 变量与基本类型
 author: xyx
 date: 2021-11-24 13:33:00 +0800
 categories: [C++, cpp-base]
