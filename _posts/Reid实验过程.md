@@ -36,6 +36,10 @@
   调参
 ![p2](/assets/ims/2021.11/p6.png)
 
+- 改进7 调参
+![p2](/assets/ims/2021.11/p3.png)
+
+
 
 # 2.dukemtmcreid
 
