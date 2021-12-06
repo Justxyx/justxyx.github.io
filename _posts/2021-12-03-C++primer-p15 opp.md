@@ -96,6 +96,29 @@ void test01(){
 }
 ```
 
+**虚函数 引用 指针 才可以引出多态问题**
+```c
+class Fu_1{
+public:
+    void method(){
+        cout << " Fu method" << endl;
+    }
+};
+
+class Zi_1 : public Fu_1{
+public:
+    void method(){
+        cout << " Zi method" << endl;
+    }
+};
+void test02(){
+    Zi_1 z;
+    Fu_1 &f = z;
+    z.method();  //  Zi method
+    f.method();  //  Fu method
+}
+```
+
 
 ## 抽象基类
 
