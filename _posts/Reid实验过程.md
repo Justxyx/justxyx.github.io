@@ -68,9 +68,13 @@
 ![p2](/assets/ims/2021.11/p12.png)
 
 
-# 消融实验
+# 参数实验
 
 ## market1501
 
 - 0.01
 ![p2](/assets/ims/2021.11/p14.png)
+
+
+- 0.02
+![p2](/assets/ims/2021.11/p15.png)
