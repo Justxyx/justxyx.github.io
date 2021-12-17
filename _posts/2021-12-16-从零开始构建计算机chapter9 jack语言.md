@@ -1,5 +1,5 @@
 ---
-title: 从零开始构建计算机chapter8_jack语言
+title: 从零开始构建计算机chapter9_jack语言
 author: xyx
 date: 2021-6-16 20:33:00 +0800
 categories: [justxyx, computer-system-structure]
