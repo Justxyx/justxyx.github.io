@@ -8,6 +8,39 @@ math: true
 ---
 
 
+## 对前面几章的一点总结
+
+```c
+int main(){
+    char dirName[] = ".";
+    DIR		*dir_ptr;		/* the directory */
+    struct dirent	*direntp;		/* each entry	 */
+    struct stat info;
+
+
+    if ((dir_ptr = opendir(dirName)) == NULL){
+        cout << "error" << endl;
+    } else{
+        while ((direntp = readdir(dir_ptr)) != NULL){
+            cout << direntp->d_name << endl;
+            stat(direntp->d_name,&info);
+            cout << info.st_nlink  << endl;
+        }
+    }
+}
+```
+
+1.  打开文件夹
+    char dirName[] = ".";
+    DIR		*dir_ptr;
+    dir_ptr = opendir(dirName)  
+    direntp->d_name
+
+2. 文件与文件夹详情 
+    struct stat info;
+    stat(direntp->d_name,&info);   // 文件名与文件结构
+
+
 ## 1. 设备也是文件
 
 ### 1.1 设备也具有文件名
@@ -40,4 +73,18 @@ xm       pts/1        2022-01-04 11:40 (192.168.2.103)
 
 ### 1.3 设备的文件属性
 
+`ls -li /dev/pts/2`
+
 ```c
+xm@xm-System-Product-Name:~/xyx/linux_os$ ls -li /dev/pts/2
+5 crw--w---- 1 xm tty 136, 2 Jan  4 13:28 /dev
+```
+解释：
+拥有i-节点4    1 个链接   
+
+在/dev/pts/2这个例子中，从终端进行数据传输的代码是在设备一进程表中编号为136
+的子程序。该子程序接受一个整型参数。在/dev/pts/2 中,参数是2。136 和2这两个数被
+称为设备的主设备号和从设备号。主设备号确定处理该设备实际的子程序，而从设备号被
+作为参数传输到该子程序。
+
+
