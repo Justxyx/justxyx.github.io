@@ -80,11 +80,95 @@ xm@xm-System-Product-Name:~/xyx/linux_os$ ls -li /dev/pts/2
 5 crw--w---- 1 xm tty 136, 2 Jan  4 13:28 /dev
 ```
 解释：
-拥有i-节点4    1 个链接   
+拥有i-节点4    1 个链接   。
+
+文件类型为c，表示该文件实际上是以字符为单位进行传送的设备。
 
 在/dev/pts/2这个例子中，从终端进行数据传输的代码是在设备一进程表中编号为136
 的子程序。该子程序接受一个整型参数。在/dev/pts/2 中,参数是2。136 和2这两个数被
 称为设备的主设备号和从设备号。主设备号确定处理该设备实际的子程序，而从设备号被
 作为参数传输到该子程序。
 
+**内核首先找到文件描述的i-节点，该i-节点用户告诉内核的文件类型。**
 
+- 磁盘文件
+
+内核通过访问块分配表来读取文件
+
+- 设备文件
+
+内核通过调用设备驱动的write来读取数据
+
+
+## 2 设备与文件
+
+### 2.1 磁盘链接属性
+
+- 1. 缓冲属性
+磁盘链接具有缓冲这样的一个属性
+
+关闭缓冲属性
+```c
+int s ;
+s = fcntl(fd,F_GETFL);
+s |= O_SYNC;
+result = fcntl(fd,F_SETEL,s);
+if (reslut == 1)
+    perroe("setting SYNC");
+```
+
+
+- 2. 改为自动添加模式
+
+```c
+int s ;
+s = fcntl(fd,F_GETFL);
+s |= O_APPEND;
+result = fcntl(fd,F_SETEL,s);
+if (reslut == 1)
+    perroe("setting SYNC");
+```
+
+- 3. 利用open控制文件描述
+
+例如
+`fd = open(FILE_NAME,O_WRONLY|O_APPEND|O_SYNC;`
+
+### 2.2 终端链接属性
+
+```c
+stty -echo   // 关闭回显
+stty rease X  // x为删除键
+```
+
+直接贴代码吧，比较好懂一点
+
+```c
+struct termios {
+    tcflag_t        c_iflag;        /* input flags */
+    tcflag_t        c_oflag;        /* output flags */
+    tcflag_t        c_cflag;        /* control flags */
+    tcflag_t        c_lflag;        /* local flags */
+    cc_t            c_cc[NCCS];     /* control chars */
+    speed_t         c_ispeed;       /* input speed */
+    speed_t         c_ospeed;       /* output speed */
+};
+
+int main(){
+    struct termios *attribs;
+    int fd;
+    // 获取属性
+    int result = tcgetattr(fd,attribs);
+    
+    int when = TCSANOW;     
+    // 修改属性后写入
+    result = tcsetattr(fd,when,attribs);
+```
+
+## 3. 其他设备的链接
+
+流程其实还是差不多
+  
+1. 读取驱动
+2. 修改驱动
+3. 写回驱动
