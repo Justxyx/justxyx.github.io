@@ -1,0 +1,5 @@
+
+type:down            HID usage: 12,234    name:{"consumer_key_code":"volume_decrement"}                misc:
+type:up              HID usage: 12,234    name:{"consumer_key_code":"volume_decrement"}                misc:
+type:down            HID usage: 9,1       name:{"pointing_button":"button1"}                           misc:
+type:up              HID usage: 9,1       name:{"pointing_button":"button1"}                           misc:
