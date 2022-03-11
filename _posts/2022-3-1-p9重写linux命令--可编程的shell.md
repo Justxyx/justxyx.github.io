@@ -239,7 +239,7 @@ freelist(char **list)
  *  action: free all strings in list and then free the list
  */
 {
-    char	**cp = list;
+    char **cp = list;
     while( *cp )
         free(*cp++);
     free(list);
@@ -340,3 +340,7 @@ date
 
 
 # 3. 自己编写的shell 终端如何处理shell脚本（有点类似编译原理）
+
+
+shell 脚本先略
+
