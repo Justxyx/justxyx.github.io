@@ -11,7 +11,7 @@ math: true
 
 ## OOP：概述
 
-- 面向对象程序设计（object-oriented programming）的核心思想是数据抽象、继承和动态绑定。
+- 面向对象程序设计（object-oriented programming）的核心思想是**数据抽象**、**继承**和**动态绑定**。
 - **继承**（inheritance）：
   - 通过继承联系在一起的类构成一种层次关系。
   - 通常在层次关系的根部有一个**基类**（base class）。
@@ -49,7 +49,7 @@ math: true
 - 理解基类和派生类之间的类型抓换是理解C++语言面向对象编程的关键所在。
 - 可以将基类的指针或引用绑定到派生类对象上。
 - 不存在从基类向派生类的隐式类型转换。
-- 派生类向基类的自动类型转换只对指针或引用类型有效，对象之间不存在类型转换。
+- 派生类向基类的自动类型转换只对**指针**或**引用**类型有效，对象之间不存在类型转换。
 
 ## 虚函数
 
@@ -161,6 +161,40 @@ void test02(){
 
 - 当派生类定义了拷贝或移动操作时，该操作负责拷贝或移动包括基类部分成员在内的整个对象。
 - 派生类析构函数：派生类析构函数先执行，然后执行基类的析构函数。
+
+```c
+class U1{
+public:
+    string name;
+    int age;
+
+    U1(const string &name, int age) : name(name), age(age) {}
+    // 赋值    
+    U1& operator=(U1 &u){
+        name = u.name;
+        age = u.age;
+        return *this;
+    }
+    // 拷贝
+    U1(const U1 &u):name(u.name),age(u.age) {};
+};
+
+class U2:public U1{
+public:
+    int pwd;
+
+
+    U2(const string &name, int age, int pwd) : U1(name, age), pwd(pwd) {}
+
+    U2(const U2 &u) : U1(u), pwd(u.pwd) {}
+
+    U2& operator=(U2 &u){
+        U1::operator=(u);
+        pwd = u.pwd;
+        return *this;
+    }
+};
+```
 
 ### 继承的构造函数
 
