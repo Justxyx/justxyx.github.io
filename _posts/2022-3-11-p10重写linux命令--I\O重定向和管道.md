@@ -1,4 +1,4 @@
----
+--
 title: p10重写linux命令-I/O重定向与管道
 author: xyx
 date: 2022-3-11 20:33:00 +0800
