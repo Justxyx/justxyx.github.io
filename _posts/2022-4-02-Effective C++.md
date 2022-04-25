@@ -1,5 +1,5 @@
 ---
-title: Effective C++
+title: Effective C++ p1 让自己习惯C++
 author: xyx
 date: 2022-4-02 20:33:00 +0800
 categories: [C++, effective]
@@ -11,7 +11,7 @@ math: true
 
 ### 1. 底层与底层指针
 
-> 书中的说法可能会好理解一点，出现在*号左边，表示被指物是常量。const 出现在*号的右边，表示指针是常量。
+> 书中的说法可能会好理解一点，出现在`*`号左边，表示被指物是常量。const 出现在`*`号的右边，表示指针是常量。
 
 ### 2. 迭代器的const指针
 
@@ -27,6 +27,8 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
 ```
 
 ### 3. const成员函数（重点）
+
+**如果两个成员函数只是常量性不同，则可以被重载**。
 
 ```c
     class TextBlock{
@@ -63,7 +65,7 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
 2. `non-const opertor[]`返回的是 `reference to char`, 而不是`char`
     所以`tb[0] = 'x'` 可以通过。
 
-3. **如果返回类型为内置类型，那么改动函数返回值从来就不合法**
+3. **如果返回类型为内置类型，那么改动函数返回值从来就不合法**,例如返回值是 `char` 而不是 `&char`
 
 #### const成员函数的两个阵营
 
@@ -114,3 +116,43 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
         }
     };
 ```
+
+## 04 确定对象使用前已被初始化
+
+### 1. 永远在使用对象之前将它初始化
+
+### 2. 对于类
+
+1. 确保每一个构造函数豆浆对象的每一个成员初始化
+
+2. 不要混淆**赋值** 与 **初始化**
+
+
+    ```c
+    // 赋值构造函数
+    ABEntry::ABEntry(string &name, string &theAddress, list<PhoneNUmber> &phone) {
+        // 这些都是赋值 而非初始化
+        theName = name;
+        theAddress = theAddress;
+        thePhones = phone;
+        numTimesConsulted = 0;
+    }
+    // 初始化构造函数
+    ABEntry::ABEntry(const string &theName, const string &theAddress, const list<PhoneNUmber> &thePhones,
+                    int numTimesConsulted) : theName(theName), theAddress(theAddress), thePhones(thePhones),
+                                            numTimesConsulted(numTimesConsulted) {}
+    ```
+
+3. 赋值与初始化
+
+    - 初始化的效率更高
+    - 对于内置对象，初始化与赋值的成本相同
+
+4. 有多个构造函数
+
+    可以合理的在初值列中遗漏那些**赋值表现像初始化一样好**的成员变量
+
+5. 成员初始化次序
+    与变量次序相同
+
+

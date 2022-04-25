@@ -30,7 +30,7 @@ math: true
 
 ### 3. http 请求协议
 
-组成部分： `请求行` `请求头` `请求正文`
+组成部分： `请求行` `请求头` `空行` `请求正文`
 
 **Get 请求相应协议**
 
@@ -55,6 +55,7 @@ Accept-Encoding: gzip, deflate, br
 Accept-Language: zh-CN,zh;q=0.9
 Cookie:
 
+// 请求空行 必须要有 不然服务器怎么知道请求头在哪里结束？
 
 // 请求正文
 Get 请求没有请求正文
@@ -64,7 +65,7 @@ Get 请求没有请求正文
 
 ![p2](/assets/img/some/p4.png)
 
-4. Http 响应协议
+### 4. Http 响应协议
    组成部分: `响应行` `消息报头` `响应正文`
 
 ```xml
