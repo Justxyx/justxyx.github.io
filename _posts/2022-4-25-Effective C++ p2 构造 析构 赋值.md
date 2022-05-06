@@ -50,4 +50,53 @@ int main(){
 }
 ```
 
+## 6 若不想使用编译器自动生成的函数，就明确拒绝
+
+使用 private  或者 delete （C++11）
+
+```c
+class Fu{
+public:
+    Fu(int i, int j) : i(i), j(j) {};
+//    Fu() = delete;
+    Fu(Fu&) = delete;
+    Fu& operator=(Fu&) = delete;
+    // 或者
+private:
+    Fu();
+private:
+    int i;
+    int j;
+
+};
+```
+
+## 07. 为多态的基类声明virtual析构函数
+
+### 1. 为基类声明virtual 析构函数
+
+当派生类对象经由一个基类指针被删除，而该基类带有一个 non-virtual 析构函数，结果未定义——实际执行时通常发生的是对象的 derived 成分没有销毁。**即局部销毁**，造成资源泄露。（ 因此，不要继承一个没有 virtual析构函数的基类）
+
+### 2. class 不作为基类的时候，不要将析构函数声明为virtual
+
+增大内存开销
+
+### 3. 有纯虚函数的class不能被实例化，那么，如果希望拥有抽象的class，但手头并没有 pure virtual 函数，定义一个virtual析构函数
+
+```
+class Demo{
+public:
+    virtual ~Demo() = 0;  // 申明为纯虚函数
+};
+Demo::~Demo() {}   // 需要定义
+```
+
+**注意，基类需要定义析构函数，即使他是纯析构函数，因为在子类的析构销毁中，会向上调用父类的析构销毁，必须要定义**。
+
+
+## 08 析构函数中不要吐出异常
+
+不要在析构函数中加入异常处理单元。 有异常的函数应该交给客户自己选择。
+
+
 
