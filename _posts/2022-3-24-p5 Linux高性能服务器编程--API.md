@@ -26,7 +26,17 @@ math: true
 
 ### 1.2 socket 地址
 
-- ipv4地址, sockaddr_in
+- 通用socket地址结构
+
+    ```c
+    struct sockaddr {
+	__uint8_t       sa_len;         /* total length */
+	sa_family_t     sa_family;      /* [XSI] address family */
+	char            sa_data[14];    /* [XSI] addr value (actually larger) */
+    };
+    ```
+
+- 专用地址 ipv4地址, sockaddr_in
 
     ```c
     #include<netinet/in.h>
@@ -44,7 +54,11 @@ math: true
     };
     ```
 
-- ipv6地址，sockaddr_in6
+- 专用地址 ipv6地址，sockaddr_in6
+
+- 专用地址 UNIX 本地域sockaddr_un
+
+注：**所有专用的socket地址在实际使用时都需要转换为socket地址类型sockaddr（强制转换即可）。**
 
 **协议簇与地址簇的关系**。
 
@@ -57,14 +71,15 @@ math: true
 
 ### 1.3 ip地址转换函数
 
-1. 函数原型
-    `int inet_pton(int af, const char *src, void *dst);`
+1. `in_addr_t inet_addr(const char *strptr);`
+    点分十进制ip转换为网络字节序
 
-2. 解释
-     This  function  converts  the  character  string  src into a network address structure in the af address family,
+2. `int inet_aton(const char *cp,struct in_addr *inp);`
+    点分十进制ip转换为网络字节序
 
-3. 端口转换函数
-    `htons()`  这个懒得写了，见manpage。
+3. `char *inet_ntoa(struct in_addr in);`
+    点分十进制ip转换为网络字节序
+
 
 ### 1.4 专用socket地址
 
@@ -267,3 +282,43 @@ int main(int argc,char* argv[]){
 }
 ```
 
+## 3. 数据读写
+
+
+### 3.1 TCP数据读写
+
+1. 读 
+
+    `ssize_t recv(int sockfd,void *buf,size_t len, int flags);`
+
+2. 写 
+
+    `ssize_t send(int sockfd,const void *buf,size_t len,int flags);`
+
+### 3.2 UDP数据读写
+
+1. 读 
+
+    `recvfrom`
+
+2. 写 
+    `sendto`
+
+### 3.3 通用数据读写
+
+1. 读 
+
+    `revcmsg`
+    
+2. 写 
+    `sendmsg`
+
+## 4. 判断是否为外带数据
+
+在实际应用中，我们通常无法预期外带数据合适到来。Linux内核检测到TCP紧急标志时，通过两种方式通知应用程序：
+
+- IO复用产生的异常
+- SIGURG信号
+
+但是，即使应用程序得到了外带数据的通知，还要知道外带数据的位置。通过sockatmark函数。
+`int sockamark();`
