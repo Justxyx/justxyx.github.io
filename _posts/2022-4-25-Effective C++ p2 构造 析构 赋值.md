@@ -110,3 +110,110 @@ Demo::~Demo() {}   // 需要定义
 再看这个表达式 `A = B = C`
 
 
+## 11 在operater=中处理“自我赋值”
+
+1. 下面的operator是不安全的
+
+```c
+Widget& widget::opertor=(const Widget &rhs){
+    delete pb;
+    pb = new Bitmap(*rhs.pb);
+    return *this;
+}
+```
+
+2. 方法一
+
+```c
+Widget& widget::opertor=(const Widget &rhs){
+    if  (this == &rhs)
+        return *this;
+    delete pb;
+    pb = new Bitmap(*rhs.pb);
+    return *this;
+}
+```
+
+上述方法虽然能处理自我赋值，但是不是异常安全的。
+
+3. 通过确保异常安全来获得自赋值回报
+
+```c
+Widget& widget::opertor=(const Widget &rhs){
+    Bitmap *pOrig = pb;
+    pb = new Bitmap(*rhs.pb);
+    delete pOrig;
+    return *this;
+}
+```
+
+虽然上述方法是异常安全的，但是有额外开销。
+
+4. 通过 copy and swap 技术
+
+条款29后补坑。
+
+## 12 复制对象时候 不要忘记其中的任何一个部分
+
+**如果声明自己的 copying 函数，意思就是告诉编译器你并不喜欢缺省实现中的某些行为。编译器仿佛被冒犯似的，会以一种奇怪的方式回敬：如果你自己写出的 copying 函数代码不完全，它也不会告诉你**.
+
+- copy 构造
+    - 非继承：当为类添加一个新成员时，copy 构造函数也需要为新成员添加拷贝代码。否则
+会调用新成员的默认构造函数初始化新成员
+    - 继承：在派生类的 copy 构造函数中，不要忘记调用基类的 copy 构造函数拷贝基类部分。
+否则调用基类的默认构造函数初始化基类部分
+
+- copy 赋值运算符
+    - 非继承：当为类添加一个新成员时，copy 赋值运算符中也需要为新成员添加赋值代码，
+否则新成员会保持不变
+    - 继承：在派生类的 copy 赋值运算符中，不要忘记调用基类的 copy 赋值运算符，否则基类部分会保持不变
+
+```c
+
+#include <iostream>
+using namespace std;
+
+class Demo{
+private:
+    string s;
+public:
+    Demo(const string &s) : s(s) {};
+
+    Demo(const Demo &d): s(d.s) {};
+
+    Demo& operator=(const Demo &d){
+        this->s = d.s;
+        return *this;
+    }
+};
+
+class Fu{
+public:
+    Fu(const Fu &f):name(f.name), d(f.d){
+    };
+
+    Fu(const string &name, const Demo &d) : name(name), d(d) {};
+
+    Fu& operator=(const Fu &f){
+        this->d = f.d;
+        this->name = f.name;
+        return *this;
+    }
+private:
+    string name;
+    Demo d;
+};
+
+class Zi:public Fu{
+private:
+    string pwd;
+public:
+    Zi(const string &name, const Demo &d, const string &pwd) : Fu(name, d), pwd(pwd) {}
+    Zi(const Zi &z):pwd(z.pwd), Fu(z){};
+    Zi& operator=(const Zi &z){
+        Fu::operator=(z);
+        this->pwd = z.pwd;
+        return *this;
+    }
+};
+```

@@ -7,6 +7,10 @@ tags:
 math: true
 ---
 
+## 0. pipe 与 dup
+
+
+
 
 ## 1. readv 与 writev
 

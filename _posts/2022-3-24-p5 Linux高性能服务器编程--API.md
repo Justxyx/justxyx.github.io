@@ -322,3 +322,80 @@ int main(int argc,char* argv[]){
 
 但是，即使应用程序得到了外带数据的通知，还要知道外带数据的位置。通过sockatmark函数。
 `int sockamark();`
+
+
+## 5. 获取地址信息函数
+
+```c
+    // 获取本端
+    int getsockopt(int sockfd, int level, int optname,
+                      void *optval, socklen_t *optlen);
+    // 获取远端
+    int getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+```
+
+## 6. socket 选项
+
+```c
+int getsockopt(int sockfd, int level, int optname,
+                void *optval, socklen_t *optlen);
+int setsockopt(int sockfd, int level, int optname,
+                const void *optval, socklen_t optlen);
+```
+
+![p15](../assets/ims/2022.05/p15.png)
+
+## 6. 网络信息API
+
+下面两条命令是等价的：
+
+```c
+telnet 217.0.0.1 80
+telnet localhost www
+```
+
+### 6.1 根据主机名称或地址获得主机的完整信息
+
+1. gethostbyname,
+
+2. gethostbyaddr
+
+### 6.2 根据名称或端口获得服务信息
+
+1. getservbyname
+
+2. getservbyport
+
+### 6.3 Demo
+
+```c
+int main(int argc,char *argv[]){
+    assert(argc == 2);
+    char *host = argv[1];
+
+    // 1. 获取主机地址信息
+    struct hostent *hostinfo = gethostbyname(host);
+    assert(hostinfo);
+
+    // 2. 获取daytime服务信息
+    struct servent *servinfo = getservbyname("daytimne","tcp");
+    printf("daytime port is %d\n",ntohs(servinfo->s_port));
+
+    struct sockaddr_in address;
+    address.sin_family = AF_INET;
+    address.sin_port = servinfo->s_port;
+    address.sin_addr = *(struct in_addr*)*hostinfo->h_addr_list;
+    int sockfd = socket(AF_INET,SOCK_STREAM,0);
+    int result = connect(sockfd,(struct sockaddr*)&address,sizeof(address));
+    char buffer[128];
+    result = read(sockfd,buffer,sizeof(buffer));
+    printf("the day time is %s",buffer);
+    close(sockfd);
+    return 0;
+}
+```
+
+### 6.4 getaddrinfo 与 getnameinfo
+
+略
+
