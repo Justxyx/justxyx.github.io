@@ -9,7 +9,57 @@ math: true
 
 ## 0. pipe 与 dup
 
+### 1. pipe
 
+默认为阻塞，
+` int socketpair(int domain, int type, int protocol, int sv[2]);`
+
+### 2. dup 
+
+```c
+int dup(int oldfd);
+int dup2(int oldfd, int newfd);
+```
+
+### 3.demo
+
+```c
+int main(int argc,char *argv[]){
+    if (argc<=2){
+        printf("argc error");
+        return -1;
+    }
+
+    const char* ip = argv[1];
+    int port = atoi(argv[2]);
+
+    struct sockaddr_in address;
+    bzero(&address,sizeof(address));
+    address.sin_family = AF_INET;
+    inet_pton(AF_INET,ip,&address.sin_addr);
+    address.sin_port = htons(port);
+
+    int sock = socket(PF_INET,SOCK_STREAM,0);
+    assert(sock >= 0);
+
+    int ret = bind(sock,(struct sockaddr*)&address,sizeof(address));
+    assert(ret != -1);
+
+    struct sockaddr_in client;
+    socklen_t client_addrlength = sizeof(client);
+    int connfd = accept(sock,(struct sockaddr*)&client,&client_addrlength);
+    if (connfd < 0){
+        perror("accept error");
+    } else{
+        close(STDOUT_FILENO);
+        dup(connfd);
+        printf("abcd\n");
+        close(connfd);
+    }
+    close(sock);
+    return 0;
+}
+```
 
 
 ## 1. readv 与 writev
@@ -17,8 +67,20 @@ math: true
 readv: 将数据从文件描述符读到分散的内存块中。
 writev: 将多块分散的内存数据一并写入到文件描述符中。
 
+**上面这么说可能有点抽象，这样举个例子比较好理解，Web服务器解析到一个请求后，要响应一个状态行、多个头部字段、以及返回的html文档内容。前两块可以放置在一块内存中，html文档放在另外一块内存中。我们并不需要将两个部分的内容拼接再发送，而是可以使用writev将他们同时写出**。
+
 ### 一个demo，web服务器上的集中写
 
+```c
+// readv 核心代码
+struct iovec iv[2];
+iv[0].iov_base = header_buf;
+iv[0].iov_len = strlen(header_buf);
+iv[1].iov_base = file_buf;
+iv[1].iov_len = strlen(file_buf);
+```
+
+完整代码：
 ```c
 int main(int argc,char *argv[]){
     if (argc <= 3){
@@ -104,7 +166,7 @@ int main(int argc,char *argv[]){
 ```
 
 
-## 2. senfile 函数
+## 2. senfile 函数（零拷贝）
 
 函数原型： `ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);`
 
@@ -170,9 +232,11 @@ int main(int argc,char* argv[]){
 
 ## 4. splice函数
 
-两个文件描述符间的数据移动，**零拷贝操作**。
+两个文件描述符间的数据移动，**零拷贝操作**。  where one of the file descriptors must refer to a pipe.
 
 ### demo
+
+一个零拷贝的回射服务器，将客户端发送的数据原样的返回客户端。
 
 ```c
 
@@ -222,6 +286,8 @@ int mian(int argc,char* argv[]){
 两个管道间的文件描述符之间的复制数据。**零拷贝操作**。
 
 ## 5. fcntl函数
+
+根据文件描述符更改属性 
 
 略。
 
