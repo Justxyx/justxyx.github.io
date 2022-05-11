@@ -1,7 +1,7 @@
 ---
 title: Effective C++ p2 构造 析构 赋值
 author: xyx
-date: 2022-4-025 20:33:00 +0800
+date: 2022-4-25 20:33:00 +0800
 categories: [C++, effective]
 tags: 
 math: true
