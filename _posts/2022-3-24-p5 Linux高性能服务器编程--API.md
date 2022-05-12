@@ -328,8 +328,7 @@ int main(int argc,char* argv[]){
 
 ```c
     // 获取本端
-    int getsockopt(int sockfd, int level, int optname,
-                      void *optval, socklen_t *optlen);
+     int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
     // 获取远端
     int getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 ```
