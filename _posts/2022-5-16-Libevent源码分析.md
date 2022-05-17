@@ -144,7 +144,8 @@ ev_flags:
 event-internal p49
 ```c
 struct event_base {
-	const struct eventop *evsel;
+    // 可调用evsel->add(evbase, ev)，
+	const struct eventop *evsel;  // evsel 指向全局变量static const struct eventop *eventops[] 中的一个 
 	void *evbase;
 	int event_count;		/* counts number of total events */
 	int event_count_active;	/* counts number of active events */
@@ -153,18 +154,18 @@ struct event_base {
 	int event_break;		/* Set to terminate loop immediately */
 
 	/* active event management */
-	struct event_list **activequeues;
+	struct event_list **activequeues;  // 二级指针 下面有注释详解
 	int nactivequeues;
 
 	/* signal handling info */
-	struct evsignal_info sig;
+	struct evsignal_info sig; // 管理信号结构体
 
-	struct event_list eventqueue;
-	struct timeval event_tv;
+	struct event_list eventqueue;  // 链表 所有已经注册的event时间指针
+	struct timeval event_tv;  // 事件管理变量 last wait time
 
-	struct min_heap timeheap;
+	struct min_heap timeheap;  // 管事定时事件的小根堆
 
-	struct timeval tv_cache;
+	struct timeval tv_cache;  // 时间管理变量
 };
 ```
 
@@ -210,3 +211,5 @@ void event_process_active(struct event_base *base);
 
 1. event_add
     event.c p730
+
+
