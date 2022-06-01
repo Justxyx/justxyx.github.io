@@ -69,3 +69,45 @@ Lock lock2(&mutex);
 3. 对底部资源进行深拷贝
 
 4. 对底部资源进行转移，例如`auto_ptr`.
+
+## 15. 在资源管理类中提供对原始资源的访问
+
+这个没看懂
+
+## 16. 成对使用new 和 delete 要采取相同的形式
+
+对于数组，`string *s = new string[5];` 会发生什么 ？
+
+string 的构造函数将会被调用5次。
+
+`delete s` 与 `delete s[]` 区别：
+两者都会删除5个string大小的内存区域，但是，**前者只会调用一次析构函数**。
+
+多以，结论：new时使用[]，delete 时也要delete[]。
+
+## 17 以独立的语句将newed对象置入智能指针
+
+现有函数接口：
+`void processWidget(shared_ptr<Widget> pw,int priority);`
+
+1. 调用1
+
+    `processWidget(new Widget,prioryit())`, 错误，shared_ptr构造函数是`explict`的。
+
+2. 调用2
+
+    `processWidget(shared_ptr<Wiget>(new Wiget),prioryit())`
+
+    **可能会发生资源泄露**。编译器的调用步骤可能是：
+    - new Wiget
+    - priority()
+    - shared_ptr的构造函数
+    如果对priority()的函数调用失败，那么new Wiget的构造就会产生资源泄露。
+
+3. 调用3 正确调用
+
+    - `shared_ptr<Wiget>  p(new Wiget);`.   
+    - `processWidget(p,prioryit())`;
+
+总结一下，用独立的new 对象存储在智能指针中，如果不这么做，一单有异常抛出，会产生难以察觉的资源泄露。
+
