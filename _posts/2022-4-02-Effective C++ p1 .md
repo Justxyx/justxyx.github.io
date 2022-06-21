@@ -117,6 +117,67 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
     };
 ```
 
+### 4. const 修饰函数参数 返回值 成员函数
+
+1. 修饰参数
+
+    ```cpp
+    // 1. const 修饰参数
+    // 总结一下： const 可以接受非const 参数 。 而非const 只能接受非const  所以要多用const
+    void test01(const int i, const int j) {  // 修饰形参  如果不加指针或者引用 没必要加const 因为本来就不在一个空间内
+
+    }
+    void test02(const int &i, const int &j) {  // 修饰引用
+
+    }
+    ```
+
+2. 修饰返回值（重点）
+
+    ```cpp
+    // 2. const 修饰返回值 只能在**引用** 的时候使用   其唯一的作用就是返回值不能作为左值使用
+    const vector<int>& test03(vector<int> &res) {
+        return res;
+    }
+
+    vecotr<int> v = test03(v2);  // 这个是正确的 有没有const 对这个不影响
+    test03(v2)[1] = 15; // 这个是错误的  const 返回值不能作为左值使用
+    ```
+
+    记住这句话：返回值作为引用其唯一的作用就是使函数返回值不能作为左值使用。
+
+3. 修饰成员函数
+
+    略
+
+### 5. const 修饰返回值（重点）
+
+还是把这个再写清楚一点 const 修饰返回值只有在返回值为引用或者指针的时候又用，下面分别说明一下这两种情况，还是感觉到有点奇怪。
+
+1. 修饰引用
+
+    ```cpp
+    const vector<int>& test03(vector<int> &res) {
+        return res;
+    }
+
+    vector<int> res = test03(v); // res接受引用无效
+    res.back() = 14;   // 正确  res跟返回值是不是const 引用 好像没啥关系  其改变不影响v的改变
+    test03(v).back();  //错误 
+    ```
+
+2. 修饰指针
+
+    ```cpp
+    const vector<int> * test04(vector<int> *p) {
+        return p;
+    }
+    const vector<int>  * res = t.test04(&v);  // 正确  res的改变影响v的改变
+    vector<int>  * res = t.test04(&v);  // 错误
+    ```
+
+    指针是可以接受返回值的,跟引用完全不一样。
+
 ## 04 确定对象使用前已被初始化
 
 ### 1. 永远在使用对象之前将它初始化
