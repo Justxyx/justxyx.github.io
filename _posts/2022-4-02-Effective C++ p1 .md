@@ -162,6 +162,7 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
     }
 
     vector<int> res = test03(v); // res接受引用无效
+    // const vector<int> &res = test03(v);
     res.back() = 14;   // 正确  res跟返回值是不是const 引用 好像没啥关系  其改变不影响v的改变
     test03(v).back();  //错误 
     ```
@@ -176,7 +177,6 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
     vector<int>  * res = t.test04(&v);  // 错误
     ```
 
-    指针是可以接受返回值的,跟引用完全不一样。
 
 ## 04 确定对象使用前已被初始化
 

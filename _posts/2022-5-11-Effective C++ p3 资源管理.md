@@ -57,7 +57,7 @@ Lock lock(&mutex);
 那如果复制呢？
 
 ```cpp
-Lock lock2(&mutex);
+Lock lock2(lock);
 ```
 
 上述代码不可以这样简单直接复制。对于资源管理类中的copying，一般有下面几条建议：
