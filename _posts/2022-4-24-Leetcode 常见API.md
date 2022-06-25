@@ -11,11 +11,9 @@ math: true
 
 - int 转 str
 
-    ```c
-    int aa = item;
-    stringstream ss;
-    ss<<aa;
-    string s1 = ss.str();
+    ```cpp
+    int i = 12;
+    string s = to_string(i);
     ```
 
 - str 转 int

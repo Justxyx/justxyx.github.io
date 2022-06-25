@@ -124,3 +124,6 @@ void clearEverything(webBrowser &wb) {
 因此，对于对象内的代码。越少代码可以看到数据（也就是访问它），越多的数据可被封装，我们也就越能自由地改变对象数据。作为一种粗糙的测量，越多函数可访问它，数据的封装性就越低.
 
 **如果要在一个 member 函数和一个 non-member，non-friend 函数之间做选择，而且两者提供相同机能，那么，导致较大封装性的是 non-member，non-friend 函数**
+
+## 24.若所有参数都需要类型转换，请为此采用non-member函数
+
