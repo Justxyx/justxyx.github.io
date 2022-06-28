@@ -127,3 +127,215 @@ void clearEverything(webBrowser &wb) {
 
 ## 24.若所有参数都需要类型转换，请为此采用non-member函数
 
+基础类如下：
+
+```cpp
+class Rational {
+public:
+    RAtional(int numerator = 0,
+            int denominator = 1);
+    int numerator () const;
+    int denominator () const; 
+private:
+}
+```
+
+如果想为该类支撑起诸如加法，乘法的运算，那么该使用 **member** or **no_member** 函数 ？
+
+### 使用member函数
+
+```cpp
+class Rational {
+public:
+    const Rational operator* (const Rational &rhs) const;
+}
+```
+
+```cpp
+Rational oneEighth(1,8);
+Rational oneHalf(1,2);
+Rational result = oneHalf * oneEighth;  // 正确
+result = result * oneEighth;        // 正确
+
+result = oneHalf * 2;   // 正确
+result = 2 * oneHalf;   // 错误
+```
+
+`result = oneHalf * 2` 的逻辑可以转换为：
+
+```cpp
+const Rational temp(2);
+result = oneHalf * temp;
+```
+
+前提是该构造函数为 **no-explicit**构造函数。
+
+**但是用上述方法，member 函数来使用，其加法不满足交换律，这也不是我们想看到的**。
+
+### 使用no_member函数
+
+```cpp
+class Rational {
+    ...
+}
+const Rational operator* (const Rational &lhs,
+                            const Rational &rhs)
+{
+    ...
+}
+```
+
+使用no-member函数即可完美解决上述问题。
+
+
+## 25 考虑写出一个不抛出异常的swap
+
+深拷贝问题：
+
+```cpp
+// 可结合条款11查看
+class Person {
+public:
+    Person(string names) {
+        name = new string(names);
+    }
+    
+    Person(Person &p) {
+        name = new string(*p.name);
+    }
+    
+    Person& operator=(const Person p){  // 拷贝赋值一定要注意
+        if (this == &p)
+            return *this;
+        string *temp = p.name;
+        name = new string(*p.name);
+        delete temp;
+        return *this;
+    }
+
+private:
+    string *name;
+};
+```
+
+### 一个由编译器构造的类 其swap是如何完成的？
+
+```cpp
+namespace std {
+    template<class T>
+    void swap(T &a, T &b) {
+        T temp(a);  // 拷贝构造
+        a = b;    // 拷贝赋值
+        b = temp; // 拷贝赋值
+    }
+}
+```
+
+### point to implementtation (pimpl写法)
+
+> 以一个指针指向数据
+
+```cpp
+class WidgeImpl {
+private:
+    string ss;
+    vecotr<int> v;  // 总之很多数据    
+}
+```
+
+```cpp
+class Widet {
+public:
+    Widet(const Widet &rhs){} // 拷贝构造
+
+    Widet& operator =(cosnt Widet &rhs) { // 赋值构造
+        ...
+        *pImpl = *(rhs.pImpl);  // 这个可以见条款11和12 深浅拷贝
+        ...
+    }
+private:
+    WidgeImpl *pImpl;
+}
+```
+
+**可以试想一下，如果用编译器自带的swap函数，会构造多次Widet 的构造函数与析构函数，而我们想要的，仅仅是交换 Widet的两个数据指针而已**。
+
+### 如果改进该类的swap函数？
+
+```cpp
+class Widet {
+public:
+    void swap(Widet &others) {
+        using std::swap;
+        swap(pImpl,others.pImpl);
+    }
+private:
+    WidgeImpl *pImpl;
+}
+
+namespace std {
+    template<>
+    void swap<Widet> (Widet &a, Widet &b) {
+        a.swap(b);
+    }
+}
+
+```
+
+### 那如果 Widet 是模板类呢 ？
+
+下面的类是合法的：
+
+```cpp
+template <class T>
+class WidetImpl {
+private:
+    T a;
+    int b;
+};
+
+template <class T>
+class Widet {
+public:
+    void swap(Widet<T> &other) {
+        using std::swap;
+        swap(p,other.p);
+    }
+private:
+    WidetImpl<T> *p;
+};
+```
+
+但是在std中却不合法：
+
+```cpp
+namespace std {
+    template <class T>
+    void swap<Widet<t>> (Widet &a, Widet &b) {
+        a.swap(b);
+    }
+}
+```
+
+**不要在企图在std中新加东西**。
+
+所以，我们应该如何做才好呢 ？ 新加命名空间并写出 non-member的swap函数：
+
+```cpp
+namespace xm {
+
+template <class T>
+Widet {   
+}
+
+template <class T>
+void swap(Widet<T> &a, Widet<T> &b) {
+    a.swap(b);
+}
+
+}
+```
+
+## 解释一下 `using std::swap` 与 命名空间 xm
+ 
+会首先查找 xm 命名空间内的swap 函数， 如果没有合适的，就会向上寻找std 中偏特化版本的std::swap; 切记不可直接使用`std::swap(a,b)`,该用法会直接强制使用std默认的swap版本。
