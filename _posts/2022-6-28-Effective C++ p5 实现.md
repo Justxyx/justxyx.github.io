@@ -186,3 +186,10 @@ void Menud::changeImage (istream &imgsrc) {
 2. 强烈保证往往可以以`copy and swap`实现。
 3. 异常安全保证往往只用提供到其所调用的各个函数的异常安全的最低保证。
 
+## 30. inlining 的里里外外
+
+略
+
+## 31. 将文件间的编译依存关系降到最低
+
+略
