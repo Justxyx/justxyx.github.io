@@ -192,4 +192,37 @@ void Menud::changeImage (istream &imgsrc) {
 
 ## 31. 将文件间的编译依存关系降到最低
 
-略
+1. 源代码：
+
+```cpp
+class Person{
+public:
+...
+private:
+std::string theName; //实现细目
+Date theBirthDate; //实现细目
+Address theAddress; //实现细目
+};
+```
+
+但是如此却会在 Person 定义文件和其含入文件之间形成了一种编译依存关系。如果这些头文件中有任何一个被改变，或这些文件所依赖的其它头文件有任何改变。那么每个含入 Person class 的文件就得重新编译，任何使用 Person class 的文件也必须重新编译。这样的连串编译依存关系会对许多项目造成难以形容的灾难你可能会想着将实现细目分开.
+
+2. 改进
+
+```cpp
+class Person{
+public:
+Person(string& name);
+string name() const;
+private:
+shared_ptr<PersonImpl> pImpl;
+};
+
+Person::Person(string& name): pImpl(new PersonImpl(name)){}
+
+string Person::name(){
+return pImpl->name();
+}
+```
+
+将实现与接口分离。
