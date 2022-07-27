@@ -9,9 +9,14 @@ math: true
 
 ## 03 尽可能使用const
 
-### 1. 底层与底层指针
+### 1. 顶层与底层指针
 
-> 书中的说法可能会好理解一点，出现在`*`号左边，表示被指物是常量。const 出现在`*`号的右边，表示指针是常量。
+> 书中的说法可能会好理解一点，出现在`*`号左边，表示被指物是常量。const 出现在`*`号的右边，表示指针是常量。出现在两边表示指针与被指物都是常量。
+
+```cpp
+void f1(const Widget *pw);  // 这两种写法等价
+void f1(Widget const *pw);
+```
 
 ### 2. 迭代器的const指针
 
@@ -26,6 +31,7 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
 -- ite2;  // 正确
 ```
 
+**const 可对返回值， 各参数， 函数自身（如果是成员函数）产生关联）**。下面依次说明。
 ### 3. const成员函数（重点）
 
 **如果两个成员函数只是常量性不同，则可以被重载**。
@@ -70,7 +76,7 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
 #### const成员函数的两个阵营
 
 - bitwise const
-    不改变一个成员的一个bit
+    不改变一个成员的任何一个bit， 即编译器只需要检测赋值动作即可。
 
 - logical constness
     如下代码所示
@@ -152,7 +158,7 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
 
 ### 5. const 修饰返回值（重点）
 
-还是把这个再写清楚一点 const 修饰返回值只有在返回值为引用或者指针的时候又用，下面分别说明一下这两种情况，还是感觉到有点奇怪。
+还是把这个再写清楚一点 const 修饰返回值只有在返回值为引用或者指针的时候有用，下面分别说明一下这两种情况，还是感觉到有点奇怪。
 
 1. 修饰引用
 
@@ -177,6 +183,24 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
     vector<int>  * res = t.test04(&v);  // 错误
     ```
 
+3. 针对既不是引用， 又不是指针的返回值
+
+    ```cpp
+    class D1{
+    public:
+        const string m1() {
+            return "hello";
+        }
+    };
+
+    主要看下面这两种：
+    // 1. 编译通过
+    string s = d.m1();
+    s = "yyy";
+
+    // 2. 编译失败
+    d.m1() = "yyy";   // 这个好像没啥意义 但是不加const 就编译可通过
+    ``` 
 
 ## 04 确定对象使用前已被初始化
 
@@ -217,3 +241,11 @@ vector<int>::const_iterator ite2 = vec.begin();  // 类似于 const T * 指针
     与变量次序相同
 
 
+### 3. 不同编译单元内定义值non-local static 对象的初始化次序
+
+- non-local static 对象： 不在函数内的static 对象
+- local static 对象： 在函数内的对象
+
+![p2](../assets/ims/2022.07/p2.png)
+
+解决方案： 利用单例模式的思想。
