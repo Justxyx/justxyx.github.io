@@ -115,6 +115,7 @@ Demo::~Demo() {}   // 需要定义
 1. 下面的operator是不安全的
 
 ```c
+// 自赋值会出现问题
 Widget& widget::opertor=(const Widget &rhs){
     delete pb;
     pb = new Bitmap(*rhs.pb);
@@ -125,6 +126,7 @@ Widget& widget::opertor=(const Widget &rhs){
 2. 方法一
 
 ```c
+// 如果new 发生异常 对象pb指向内存将会被删除
 Widget& widget::opertor=(const Widget &rhs){
     if  (this == &rhs)
         return *this;
