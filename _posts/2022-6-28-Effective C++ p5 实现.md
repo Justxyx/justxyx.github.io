@@ -158,6 +158,8 @@ bg.reset(new Image(src));   // 条款13 用智能指针来管理
 
 ### 3. copy and swap 技术
 
+原则： 为你打算修改的对象做出一个副本，然后在那副本上做一切必要的修改。若有任何修改动作抛出了异常，原对象仍然保持为改变状态。带所有改变都成功后，做出一个不抛出异常的swap动作。
+
 ```cpp
 struct PMImpl {
     shared_ptr<Image> bgImages;
