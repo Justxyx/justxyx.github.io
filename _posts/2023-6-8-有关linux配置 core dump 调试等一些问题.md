@@ -1,7 +1,7 @@
 ---
 title: 有关linux配置 core dump 调试等一些问题
 author: xyx
-date: 2023-5-16 13:33:00 +0800
+date: 2023-6-8 13:33:00 +0800
 categories:  [C++, linux-os]
 tags:
 math: true
@@ -129,3 +129,16 @@ Program terminated with signal SIGSEGV, Segmentation fault.
 11
 (gdb) 
 ```
+
+
+- info f
+    打印当前栈信息
+
+- info args
+    打印出当前函数的参数名及其值。
+
+- info locals
+    打印出当前函数中所有局部变量及其值。
+
+- info catch
+    打印出当前的函数中的异常处理信息。
