@@ -2,7 +2,7 @@
 title: p11 重写linux命令--服务器与socket
 author: xyx
 date: 2022-3-11 20:33:00 +0800
-categories: [C++, linux-os]
+categories: [justxyx, system-programming]
 tags: 
 math: true
 ---

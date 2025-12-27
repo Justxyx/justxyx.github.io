@@ -2,7 +2,7 @@
 title: Linux配置mysql并开启远程访问
 author: xyx
 date: 2022-7-30 20:33:00 +0800
-categories: [justxyx, others]
+categories: [justxyx, tools]
 tags: 
 math: true
 ---

@@ -2,7 +2,7 @@
 title: Effective C++ p6 继承与面向对象设计
 author: xyx
 date: 2022-6-30 20:33:00 +0800
-categories: [C++, effective]
+categories: [justxyx, c-cpp]
 tags: 
 math: true
 ---

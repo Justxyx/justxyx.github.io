@@ -2,7 +2,7 @@
 title: itertor_traits详解
 author: xyx
 date: 2022-1-04 20:33:00 +0800
-categories: [C++, cpp-base]
+categories: [justxyx, c-cpp]
 tags: 
 math: true
 ---

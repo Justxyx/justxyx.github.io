@@ -2,7 +2,7 @@
 title: Linux高性能服务器编程--高级io
 author: xyx
 date: 2022-4-6 20:33:00 +0800
-categories: [C++, linux-os]
+categories: [justxyx, net-programming]
 tags: 
 math: true
 ---

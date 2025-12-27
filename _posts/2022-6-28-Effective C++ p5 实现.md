@@ -2,7 +2,7 @@
 title: Effective C++ p5 实现
 author: xyx
 date: 2022-6-28 20:33:00 +0800
-categories: [C++, effective]
+categories: [justxyx, c-cpp]
 tags: 
 math: true
 ---

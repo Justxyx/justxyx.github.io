@@ -2,7 +2,7 @@
 title: 从零开始构建计算机chapter9_jack语言
 author: xyx
 date: 2021-12-16 20:33:00 +0800
-categories: [justxyx, computer-system-structure]
+categories: [justxyx, system-programming]
 tags: 
 math: true
 ---

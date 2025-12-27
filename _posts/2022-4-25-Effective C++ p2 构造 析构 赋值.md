@@ -2,7 +2,7 @@
 title: Effective C++ p2 构造 析构 赋值
 author: xyx
 date: 2022-4-25 20:33:00 +0800
-categories: [C++, effective]
+categories: [justxyx, c-cpp]
 tags: 
 math: true
 ---

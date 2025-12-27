@@ -2,7 +2,7 @@
 title: p9重写linux命令-可编程的shell
 author: xyx
 date: 2022-3-1 20:33:00 +0800
-categories: [C++, linux-os]
+categories: [justxyx, system-programming]
 tags: 
 math: true
 ---

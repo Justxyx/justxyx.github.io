@@ -2,7 +2,7 @@
 title: makefiel 解析一
 author: xyx
 date: 2023-3-7 13:33:00 +0800
-categories:  [C++, linux-os]
+categories: [justxyx, c-cpp]
 tags:
 math: true
 ---

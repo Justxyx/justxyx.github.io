@@ -2,7 +2,7 @@
 title: C++primer-p15 opp
 author: xyx
 date: 2021-12-03 13:33:00 +0800
-categories: [C++, cpp-base]
+categories: [justxyx, c-cpp]
 tags:
 math: true
 ---

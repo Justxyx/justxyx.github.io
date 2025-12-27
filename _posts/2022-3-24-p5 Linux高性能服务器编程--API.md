@@ -2,7 +2,7 @@
 title: Linux高性能服务器编程--API 
 author: xyx
 date: 2022-3-24 20:33:00 +0800
-categories: [C++, linux-os]
+categories: [justxyx, net-programming]
 tags: 
 math: true
 ---

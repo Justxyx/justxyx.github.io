@@ -2,7 +2,7 @@
 title: 重写linux命令05_stty
 author: xyx
 date: 2022-1-04 20:33:00 +0800
-categories: [C++, linux-os]
+categories: [justxyx, system-programming]
 tags: 
 math: true
 ---

@@ -2,7 +2,7 @@
 title: Effective C++ p7 模板与泛型编程
 author: xyx
 date: 2022-7-06 20:33:00 +0800
-categories: [C++, effective]
+categories: [justxyx, c-cpp]
 tags: 
 math: true
 ---
