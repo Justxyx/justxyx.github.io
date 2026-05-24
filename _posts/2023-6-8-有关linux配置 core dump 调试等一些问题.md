@@ -2,7 +2,7 @@
 title: 有关linux配置 core dump 调试等一些问题
 author: xyx
 date: 2023-6-8 13:33:00 +0800
-categories: [justxyx, kernel]
+categories: [linux-system]
 tags:
 math: true
 ---

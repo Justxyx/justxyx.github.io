@@ -2,7 +2,7 @@
 title: tcp&ip chapter3
 author: xyx
 date: 2025-12-28 13:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags:
 math: true
 ---
@@ -592,3 +592,82 @@ PPP（Point-to-Point Protocol）是一种用于两端设备之间的链路层协
 ## 3.7. Loopback
 
 1. An IP datagram sent to the loopback interface must not appear on any network. 
+2. This can be useful for performance measurement, for example, because the amount of time required to execute the stack software can be measured without any hardware overheads. In Linux, the loopback interface is called lo.
+
+```shell
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 12528602  bytes 5496931863 (5.1 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12528602  bytes 5496931863 (5.1 GiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+## 3.8. MTU and Path MTU 
+
+**maximum transmission unit (MTU).**
+
+If IP has a datagram to send, and the datagram is larger than the link layer’s MTU, IP performs fragmentation, breaking the datagram up into smaller pieces (fragments), so that each fragment is smaller than the MTU。
+
+MTU（Maximum Transmission Unit） 是指在一条具体链路上，单次能够承载的最大 IP 数据包大小，是链路层的属性。每个接口、每一跳的 MTU 可能不同，以太网中最常见的 MTU 为 1500 字节，而在 PPPoE、隧道或云网络环境中，实际可用 MTU 往往更小。
+
+当 IP 数据包大小超过出口接口 MTU 时，是否允许分片由 DF（Don’t Fragment）位决定。在 IPv4 中，如果 DF=0，路由器可以对报文进行分片；如果 DF=1，路由器在发现报文过大时会直接丢弃该报文，并返回 ICMP Fragmentation Needed 错误。IPv6 中不再使用 DF 位，而是统一禁止中间路由器分片，路径 MTU 的处理完全由源主机负责。**IPv6 不允许分片**.
+
+Path MTU 是源主机到目的主机整条路径上所有链路 MTU 的最小值，是端到端通信所必须遵守的最大报文大小。即使本地接口 MTU 足够大，只要路径中存在更小 MTU 的链路，通信就必须受其限制。
+
+Path MTU Discovery（PMTUD）正是通过设置 DF（或在 IPv6 中默认不允许分片）来工作的。源主机发送不允许分片的报文，当中间路由器因 MTU 不足而丢包时，会返回 ICMP 差错报文，通知源主机降低发送大小，从而逐步探测出真实的 Path MTU。
+
+如果 PMTUD 相关的 ICMP 报文被防火墙丢弃，源主机将无法得知路径 MTU，导致大报文反复重传，表现为“连接能建立但没有数据传输”，这类问题被称为 PMTUD Black Hole，在隧道、跨运营商和云网络场景中尤为常见。
+
+在工程实践中，应避免依赖 IP 分片，合理使用 DF 与 PMTUD 机制，并在必要时通过降低接口 MTU 或 TCP MSS Clamping 来规避路径 MTU 不匹配问题。遇到异常卡流量问题时，DF 与 Path MTU 往往是首要排查点。
+
+当 IP 报文在转发过程中大于某一跳路由器“出口接口 MTU”时，如果允许分片，路由器会对报文进行分片并继续转发；如果禁止分片（IPv4 中 DF=1），路由器只能丢弃该报文并返回 ICMP 错误。这里的“报文过大”始终是指报文大小超过当前转发节点即将使用的出口接口 MTU，而不是源主机或路由器整体的 MTU。
+
+路由器分片后并不会负责重组，所有 IP 分片只能由目的主机进行重组。主机通过 Identification、Fragment Offset 和 MF 位识别并拼接分片，只有在所有分片都完整到达时，才会将数据交付给上层协议。只要任意一个分片丢失，整个 IP 报文都会被丢弃。
+
+在 TCP 场景下，一个 TCP 段被拆成多个 IP 分片后，任一分片丢失都会触发整个 TCP 段的重传，从而放大丢包概率并显著影响性能。同时，防火墙和 NAT 设备对分片通常不友好，进一步增加了失败风险。
+
+因此，现代网络工程实践应尽量避免依赖路由器分片，而是通过 Path MTU Discovery、合理设置 MTU 以及 TCP MSS 控制报文大小。IPv6 正是基于这些问题，明确禁止中间路由器分片，将复杂度收敛到端点。
+
+**PMTUD Black Hole 总结**
+
+PMTUD Black Hole 指的是：路径中存在比发送端 MTU 更小的链路，但用于反馈路径 MTU 的 ICMP
+“Fragmentation Needed”（IPv4）或 “Packet Too Big”（IPv6）报文被丢弃或阻断，导致发送端
+无法获知真实的 Path MTU。结果是发送端持续发送过大的报文，这些报文在中间链路被反复丢弃，
+从而形成“黑洞”。
+
+该问题的典型特征是 **小包正常、大包异常**。例如 ping 正常、TCP 三次握手成功，但 TLS 握手、
+SSH、HTTPS 或大文件传输卡住；抓包时可看到大量 TCP 重传，却始终收不到 ICMP PTB 报文。
+由于 TCP 无法判断这是 MTU 问题还是网络拥塞，只会不断退避，最终表现为连接假死或极慢。
+
+在 **IPv6** 场景下，PMTUD Black Hole 尤其致命。IPv6 明确禁止中间节点分片，路径 MTU 的发现
+完全依赖 ICMPv6 Packet Too Big 报文；一旦该报文被拦截，对应路径上的通信几乎必然失败。
+因此 RFC 明确指出，随意阻断 ICMPv6 属于协议违规行为。
+
+工程实践中的常见规避手段包括：在边界设备对 TCP SYN 进行 **MSS Clamping**，人为调小主机
+或隧道接口的 MTU，或使用不依赖 ICMP 的 **PLPMTUD** 机制。但从根本上讲，**正确放行必要的
+ICMP PTB 报文**，仍然是解决 PMTUD Black Hole 的最可靠方式。
+
+**四层代理设备， 应该处理哪些协议？**
+4 层透明代理除了常规的 TCP/UDP 转发能力外，**必须正确处理一组“非业务数据但决定连通性”的控制与信令协议**，否则会在实际网络中制造隐蔽故障。核心包括：用于路径 MTU 发现的 ICMP / ICMPv6（尤其是 IPv4 Fragmentation Needed 与 IPv6 Packet Too Big），用于路由与生命周期感知的 Time Exceeded / Destination Unreachable，IPv6 的 Neighbor Discovery（NS/NA），以及与封装和路径特性相关的 IP 分片、IPv6 扩展头和 ECN 语义。这些报文不承载应用数据，却直接决定报文能否被正确送达；任何吞掉、篡改或错误处理，都会导致 PMTUD Black Hole、连接假死或大包通信异常。
+
+
+
+## 3.9. Tunneling Basics
+
+略
+
+一般用于VPN 公有云等.
+后续补充.
+
+## 3.10. Attacks on the Link Layer
+
+链路层攻击是指发生在网络协议栈最底层（二层）的攻击行为，其根本原因在于以太网及相关二层协议在设计时默认局域网环境是可信的，几乎不包含身份认证和完整性校验机制。攻击者只要能够接入同一二层网络，就可能对数据转发过程产生影响。
+
+常见的链路层攻击通过伪造或污染二层控制信息实现，例如 ARP 欺骗通过伪造 IP 与 MAC 的映射关系实现中间人攻击，MAC Flooding 通过耗尽交换机转发表使其退化为广播转发，DHCP 欺骗则通过下发错误的网络配置参数劫持主机流量。这类攻击并不依赖破解上层协议，而是直接破坏二层通信的基本假设。
+
+由于链路层位于 IP 层之下，一旦链路层被成功攻击，即使三层和四层协议本身设计正确，数据流量仍可能被监听、篡改或重定向。因此，链路层攻击通常具有隐蔽性强、影响范围大且排查困难的特点。
+
+在工程实践中，链路层攻击表明不能将“局域网”等同于“安全网络”。在企业内网、数据中心和云环境中，需要通过端口安全、ARP 防护、DHCP Snooping、VLAN 隔离等机制，弥补二层协议在安全设计上的先天不足。

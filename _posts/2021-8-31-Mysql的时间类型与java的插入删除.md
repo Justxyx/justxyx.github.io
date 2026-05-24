@@ -2,7 +2,7 @@
 title: Mysql的时间类型与java的插入删除
 author: xyx
 date: 2021-8-31 13:33:00 +0800
-categories: [justxyx, java]
+categories: [java]
 tags:
 math: true
 ---

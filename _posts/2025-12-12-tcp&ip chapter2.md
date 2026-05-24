@@ -2,7 +2,7 @@
 title: tcp&ip chapter2
 author: xyx
 date: 2025-12-12 13:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags:
 math: true
 ---

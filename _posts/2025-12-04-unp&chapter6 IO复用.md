@@ -2,7 +2,7 @@
 title: unp&chapter6 IO复用
 author: xyx
 date: 2025-12-04 13:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags:
 math: true
 ---

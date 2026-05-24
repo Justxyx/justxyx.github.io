@@ -2,7 +2,7 @@
 title: tensorflow2.0+keras环境配置
 author: xyx
 date: 2020-11-11 20:19:00 +0800
-categories: [justxyx, deep-learning]
+categories: [ai-ml]
 tags: 
 math: true
 

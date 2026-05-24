@@ -2,7 +2,7 @@
 title:  基础库不匹配导致的dlcose core 问题
 author: xyx
 date: 2025-4-24 13:33:00 +0800
-categories: [justxyx, system-programming]
+categories: [linux-system]
 tags:
 math: true
 ---

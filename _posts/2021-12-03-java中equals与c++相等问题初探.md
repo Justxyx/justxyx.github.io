@@ -2,7 +2,7 @@
 title: java中equals与c++相等问题初探
 author: xyx
 date: 2021-12-03 13:33:00 +0800
-categories: [justxyx, c-cpp]
+categories: [c-cpp]
 tags:
 math: true
 ---

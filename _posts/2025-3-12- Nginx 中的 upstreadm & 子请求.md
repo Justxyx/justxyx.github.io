@@ -2,7 +2,7 @@
 title:  Nginx 中的 upstream & 子请求
 author: xyx
 date: 2025-3-14 13:33:00 +0800
-categories: [justxyx, nginx]
+categories: [nginx-waf]
 tags:
 math: true
 ---

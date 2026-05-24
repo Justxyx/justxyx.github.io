@@ -2,7 +2,7 @@
 title: Effective C++ p1 让自己习惯C++
 author: xyx
 date: 2022-4-02 20:33:00 +0800
-categories: [justxyx, c-cpp]
+categories: [c-cpp]
 tags: 
 math: true
 ---

@@ -2,7 +2,7 @@
 title: unp&chapter5 客户端&服务器程序示例
 author: xyx
 date: 2025-12-02 13:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags:
 math: true
 ---

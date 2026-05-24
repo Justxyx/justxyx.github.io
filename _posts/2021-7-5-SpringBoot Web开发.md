@@ -2,7 +2,7 @@
 title: SpringBoot Web开发
 author: xyx
 date: 2021-7-5 20:33:00 +0800
-categories: [justxyx, java]
+categories: [java]
 tags: 
 math: true
 

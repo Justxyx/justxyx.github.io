@@ -2,7 +2,7 @@
 title: vnc 远程linux桌面  ubuntu 18.04
 author: xyx
 date: 2022-1-14 20:33:00 +0800
-categories: [justxyx, others]
+categories: [dev-tools]
 tags: 
 math: true
 ---

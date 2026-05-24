@@ -2,7 +2,7 @@
 title: Http Servlet 协议
 author: xyx
 date: 2021-9-23 13:33:00 +0800
-categories: [justxyx, java]
+categories: [java]
 tags:
 math: true
 ---

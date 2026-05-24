@@ -2,7 +2,7 @@
 title: Libevent 源码分析
 author: xyx
 date: 2022-5-16 20:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags: 
 math: true
 ---

@@ -2,7 +2,7 @@
 title: unp&chapter3 套接字简述
 author: xyx
 date: 2025-11-21 13:33:00 +0800
-categories: [justxyx, net-programming]
+categories: [network]
 tags:
 math: true
 ---

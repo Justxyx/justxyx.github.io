@@ -2,7 +2,7 @@
 title: SpringBoot + BootStrap + Thymelea模板引擎
 author: xyx
 date: 2021-7-2 20:33:00 +0800
-categories: [justxyx, java]
+categories: [java]
 tags: 
 math: true
 

@@ -2,7 +2,7 @@
 title:  netstat && ss && lsof
 author: xyx
 date: 2025-5-23 13:33:00 +0800
-categories: [justxyx, kernel]
+categories: [dev-tools]
 tags:
 math: true
 ---

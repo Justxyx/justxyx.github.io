@@ -2,7 +2,7 @@
 title: linux & nginx 经典数据结构
 author: xyx
 date: 2025-3-6 13:33:00 +0800
-categories: [justxyx, nginx]
+categories: [nginx-waf]
 tags:
 math: true
 ---
